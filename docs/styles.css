@@ -10,7 +10,9 @@
 #target {
     position: relative;
     background-color: aquamarine;
-    width: 200px;
+    width: 210px;
     height: 150px;
+    top: 100px;
+    left:?
     text-align: center;
 }
