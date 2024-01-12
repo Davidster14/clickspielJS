@@ -1,3 +1,16 @@
 .body {
     font-family: sans-serif;
 }
+#playarena {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-color: bisque;
+}
+#target {
+    position: relative;
+    background-color: aquamarine;
+    width: 200px;
+    height: 150px;
+    text-align: center;
+}
