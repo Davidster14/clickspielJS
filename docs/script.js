@@ -1,64 +1,103 @@
-const game = new Game(30);
-
 class Game {
+    /**
+     *
+     * @param {number} duration Dauer in Sekunden
+     */
+    constructor(duration) {
+        this.duration = duration;
 
-    @param number
+        this.status = "init"; // Spielphase (init, playing, paused, done)
 
-    constructor() {
-        this.duration; // Dauer in sekunden
-
-        this.points; // Punkte erreicht
-        this.countdown; // Zeit Intervall
-
-        this.status;
+        this.points = {
+            value: 0,
+            element: document.getElementById("points")
+        };
+        this.countdown = {
+            value: 0,
+            element: document.getElementById("countdown"),
+            interval: null
+        };
+        this.target = {
+            width: 200,
+            height: 150,
+            element: document.getElementById("target")
+        };
+        this.playarea = {
+            width: 800,
+            height: 600,
+            element: document.getElementById("playarea")
+        };
     }
+
+    /**
+     * [init]--start()-->[playing]
+     */
     start = () => {
         this.countdown.value = this.duration;
-        const position = getRandomPosition(target, playarea);
-        setPosition
 
+        this.countdown.interval = window.setInterval(() => {
+            this.countdown.value -= 1;
+            this.countdown.element.innerText = this.countdown.value;
+
+            if (this.countdown.value <= 0) {
+                this.stop();
+            }
+        }, 1 * 1000);
+
+        const position = getRandomPosition(this.target, this.playarea);
+        setPosition(position, this.target.element);
+
+        this.playarea.element.addEventListener("click", (event) => {
+            if (this.countdown.value > 0) {
+                console.log(event.target === this.target.element ? "Treffer!" : "Daneben!");
+
+                if (event.target === this.target.element) {
+                    this.points.value += 1;
+                } else {
+                    this.points.value = this.points.value > 0 ? this.points.value - 1 : 0;
+                }
+
+                this.points.element.innerText = this.points.value;
+
+                const position = getRandomPosition(this.target, this.playarea);
+                setPosition(position, this.target.element);
+            }
+        });
     };
+
+    /**
+     * [playing]--pause()-->[paused]
+     */
     pause = () => {};
+
+    /**
+     * [paused]--resume()-->[playing]
+     */
     resume = () => {};
+
+    /**
+     * [playing]--stop()-->[done]
+     */
     stop = () => {
-        window 
+        window.clearInterval(this.countdown.interval);
     };
 }
-const getRandomPostion = (playarea, target) => {
+
+const getRandomPosition = (target, playarea) => {
     const top = Math.random() * (playarea.height - target.height);
     const left = Math.random() * (playarea.width - target.width);
+
+    return { top: top, left: left };
 };
-document.addEventListener("DOMContentLoaded"),
-    (event) => {
-        console.log("Hello World");
-    };
-
-const target = document.getElementById("target");
-const playarea = document.getElementById("playarea");
-
-this.countdown = window.setInterval(()
-
-
-
-const playarea = {
-    width: 800,
-    height: 600,
+const setPosition = (position, elem) => {
+    elem.style.top = `${position.top}px`;
+    elem.style.left = `${position.left}px`;
 };
 
-e_playarea.addEventListener("click"),
-    (event) => {
-        console.log(event, target === target ? "Treffer" : "Daneben");
-        const top = Math.random() * (playarea.height - target.height);
-        const left = Math.random() * (playarea.width - target.width);
-        target.style.top = "$(top)px;";
-        target.style.left = "$(left)px";
-    };
+document.addEventListener("DOMContentLoaded", (event) => {
+    const game = new Game(30);
 
-let points = 0;
-
-const position = getRandomPostion(target, playarea);
-Position(position, target);
-
-if (event.target === target) {
-    points += 1;
-}
+    document.getElementById("start").addEventListener("click", (event) => {
+        game.start();
+    });
+});
